@@ -6,11 +6,9 @@
 
 class Robot: public IterativeRobot {
 
-	RobotDrive myRobot; // robot drive system
 	Joystick stick; // only joystick
 	LiveWindow* lw;
-    CANTalonSRX canControl;
-	int autoLoopCounter;
+    CANTalon leftMotor, rightMotor;
     std::chrono::time_point<std::chrono::system_clock> startTime;
 
 public:
