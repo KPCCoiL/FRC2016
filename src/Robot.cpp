@@ -6,7 +6,9 @@ Robot::Robot() :
     lw(LiveWindow::GetInstance()),
     leftMotor(0),
     rightMotor(1)
-{}
+{
+    leftMotor.SetInverted(true);
+}
 
 void Robot::AutonomousInit() {
     startTime = std::chrono::system_clock::now();
