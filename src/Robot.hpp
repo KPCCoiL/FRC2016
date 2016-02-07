@@ -6,21 +6,21 @@
 
 class Robot: public IterativeRobot {
 
-	Joystick stick; // only joystick
-	LiveWindow* lw;
+    Joystick stick; // only joystick
+    LiveWindow* lw;
     CANTalon leftMotor, rightMotor;
     std::chrono::time_point<std::chrono::system_clock> startTime;
 
-public:
-	Robot();
+    public:
+    Robot();
     static constexpr double UpdatePeriod = 0.010;
 
-private:
-	void AutonomousInit();
-	void AutonomousPeriodic();
-	void TeleopInit();
-	void TeleopPeriodic();
-	void TestPeriodic();
+    private:
+    void AutonomousInit();
+    void AutonomousPeriodic();
+    void TeleopInit();
+    void TeleopPeriodic();
+    void TestPeriodic();
 };
 
 #endif //end of include guard

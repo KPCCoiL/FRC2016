@@ -16,17 +16,17 @@ void Robot::AutonomousInit() {
 
 void Robot::AutonomousPeriodic() {
     /*
-    if(autoLoopCounter < 100) //Check if we've completed 100 loops (approximately 2 seconds)
-    {
-    using namespace std::literals;
-    if (startTime.time_since_epoch() < 2000ms) {
-        myRobot.Drive(-0.5, 0.0); 	// drive forwards half speed
-        autoLoopCounter++;
-    }
-    else {
-        myRobot.Drive(0.0, 0.0); 	// stop robot
-    }
-    */
+       if(autoLoopCounter < 100) //Check if we've completed 100 loops (approximately 2 seconds)
+       {
+       using namespace std::literals;
+       if (startTime.time_since_epoch() < 2000ms) {
+       myRobot.Drive(-0.5, 0.0); 	// drive forwards half speed
+       autoLoopCounter++;
+       }
+       else {
+       myRobot.Drive(0.0, 0.0); 	// stop robot
+       }
+       */
 }
 
 void Robot::TeleopInit() {
