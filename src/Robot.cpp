@@ -36,8 +36,11 @@ void Robot::TeleopInit() {
 void Robot::TeleopPeriodic() {
     SmartDashboard::PutNumber("number", 0.01);
     //myRobot.MecanumDrive_Cartesian(stick.GetRawAxis(0), stick.GetRawAxis(1), 0);
-    double leftSpeed = stick.GetRawAxis(1), //left joystick, y axis
-           rightSpeed = stick.GetRawAxis(5);    //right Joystick, y axis
+    constexpr double LoweredPower = 0.5;
+    double leftPower = stick.GetRawButton(5) ? LoweredPower : 1.0,
+           rightPower = stick.GetRawButton(6) ? LoweredPower : 1.0,
+           leftSpeed = stick.GetRawAxis(1) * leftPower, //left joystick, y axis
+           rightSpeed = stick.GetRawAxis(5) * rightPower;    //right Joystick, y axis
     leftMotor.Set(leftSpeed);
     rightMotor.Set(rightSpeed);
 }
