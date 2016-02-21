@@ -5,7 +5,8 @@ Robot::Robot() :
     stick(0),
     lw(LiveWindow::GetInstance()),
     leftMotor(0),
-    rightMotor(1)
+    rightMotor(1),
+    arm(2)
 {
     leftMotor.SetInverted(true);
 }
@@ -36,13 +37,17 @@ void Robot::TeleopInit() {
 void Robot::TeleopPeriodic() {
     SmartDashboard::PutNumber("number", 0.01);
     //myRobot.MecanumDrive_Cartesian(stick.GetRawAxis(0), stick.GetRawAxis(1), 0);
-    constexpr double LoweredPower = 0.5;
-    double leftPower = stick.GetRawButton(5) ? LoweredPower : 1.0,
-           rightPower = stick.GetRawButton(6) ? LoweredPower : 1.0,
+    constexpr double LoweredPower = 0.3;
+    double leftPower = stick.GetRawButton(ButtonL) ? LoweredPower : 1.0,
+           rightPower = stick.GetRawButton(ButtonR) ? LoweredPower : 1.0,
            leftSpeed = stick.GetRawAxis(1) * leftPower, //left joystick, y axis
            rightSpeed = stick.GetRawAxis(5) * rightPower;    //right Joystick, y axis
     leftMotor.Set(leftSpeed);
     rightMotor.Set(rightSpeed);
+    bool btnAPressed = stick.GetRawButton(ButtonA),
+         btnBPressed = stick.GetRawButton(ButtonB);
+    if (btnAPressed ^ btnBPressed)
+        arm.Set(btnAPressed ? 0.5 : -0.5);
 }
 
 void Robot::TestPeriodic() {

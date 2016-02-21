@@ -8,8 +8,21 @@ class Robot: public IterativeRobot {
 
     Joystick stick; // only joystick
     LiveWindow* lw;
-    CANTalon leftMotor, rightMotor;
+    CANTalon leftMotor, rightMotor, arm;
     std::chrono::time_point<std::chrono::system_clock> startTime;
+
+    enum StickButtons {
+        ButtonA = 1,
+        ButtonB,
+        ButtonX,
+        ButtonY,
+        ButtonL,
+        ButtonR,
+        ButtonBack,
+        ButtonStart,
+        ButtonLeftJoyStick,
+        ButtonRightJoyStick,
+    };
 
     public:
     Robot();
