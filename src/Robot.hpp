@@ -17,8 +17,9 @@ class Robot: public IterativeRobot {
         Joystick stick; // only joystick
         LiveWindow* lw;
         CANTalon leftMotor, rightMotor, arm;
+        DigitalInput armUpperLimit, armLowerLimit;
         std::chrono::time_point<std::chrono::system_clock> startTime;
-        std::size_t func_id;
+        std::size_t funcID;
         std::array<std::pair<std::function<double(double)>, std::string>, 5> const funcs = {{
             {[](auto x) { return std::tan(x) / std::tan(1); }, "y=tanx/tan1"},
             {[](auto x) { return sig(x) * x * x; }, "y=sig(x)x^2"},
@@ -45,6 +46,9 @@ class Robot: public IterativeRobot {
         void TeleopInit();
         void TeleopPeriodic();
         void TestPeriodic();
+        void MoveWheels();
+        void MoveArm();
+
 
     public:
         Robot();

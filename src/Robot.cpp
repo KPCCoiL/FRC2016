@@ -7,9 +7,12 @@ Robot::Robot() :
     leftMotor(0),
     rightMotor(1),
     arm(2),
-    func_id(0)
+    armUpperLimit(0),
+    armLowerLimit(1),
+    funcID(0)
 {
     leftMotor.SetInverted(true);
+    SmartDashboard::init();
 }
 
 void Robot::AutonomousInit() {
@@ -32,36 +35,47 @@ void Robot::AutonomousPeriodic() {
 }
 
 void Robot::TeleopInit() {
-
+    SmartDashboard::PutNumber("ArmOmega", 0.4);
 }
 
-void Robot::TeleopPeriodic() {
-    //move robot itself
+void Robot::MoveWheels() {
     constexpr double LoweredPower = 0.3;
     double leftPower = stick.GetRawButton(ButtonL) ? LoweredPower : 1.0,
            rightPower = stick.GetRawButton(ButtonR) ? LoweredPower : 1.0,
            leftSpeed = stick.GetRawAxis(1) * leftPower, //left joystick, y axis
            rightSpeed = stick.GetRawAxis(5) * rightPower;    //right Joystick, y axis
-    leftMotor.Set(funcs.at(func_id).first(leftSpeed));
-    rightMotor.Set(funcs.at(func_id).first(rightSpeed));
-    
-    //control of arm
-    bool btnAPressed = stick.GetRawButton(ButtonA),
-         btnBPressed = stick.GetRawButton(ButtonB);
-    if (btnAPressed ^ btnBPressed)
-        arm.Set(btnAPressed ? 0.5 : -0.5);
-    else arm.Set(0.0);
+    leftMotor.Set(funcs.at(funcID).first(leftSpeed));
+    rightMotor.Set(funcs.at(funcID).first(rightSpeed));
 
+    //check if function should be updated
     static bool yPressed = false;
     bool currentY = stick.GetRawButton(ButtonY);
     if (!yPressed && currentY) {
-        func_id = (func_id + 1) % funcs.size();
-        SmartDashboard::PutString("Function", funcs.at(func_id).second);
+        funcID = (funcID + 1) % funcs.size();
+        SmartDashboard::PutString("Function", funcs.at(funcID).second);
     }
     yPressed = currentY;
 }
 
+void Robot::MoveArm() {
+    double const ArmOmega = SmartDashboard::GetNumber("ArmOmega", 0.4);
+    bool btnAPressed = stick.GetRawButton(ButtonA),
+         btnBPressed = stick.GetRawButton(ButtonB);
+    if (btnAPressed ^ btnBPressed) {
+        if (btnAPressed && armUpperLimit.Get()) arm.Set(ArmOmega);
+        else if (armLowerLimit.Get()) arm.Set(-ArmOmega);
+    }
+    else arm.Set(0.0);
+}
+
+void Robot::TeleopPeriodic() {
+    MoveWheels();
+    MoveArm();
+}
+
 void Robot::TestPeriodic() {
+    SmartDashboard::PutBoolean("upper limit sensor pressed", armUpperLimit.Get());
+    SmartDashboard::PutBoolean("lower limit sensor pressed", armLowerLimit.Get());
     lw->Run();
 }
 
