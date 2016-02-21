@@ -63,7 +63,7 @@ void Robot::MoveArm() {
          btnBPressed = stick.GetRawButton(ButtonB);
     if (btnAPressed ^ btnBPressed) {
         if (btnAPressed && armUpperLimit.Get()) arm.Set(ArmOmega);
-        else if (armLowerLimit.Get()) arm.Set(-ArmOmega);
+        else if (btnBPressed && armLowerLimit.Get()) arm.Set(-ArmOmega);
     }
     else arm.Set(0.0);
 }
@@ -74,8 +74,8 @@ void Robot::TeleopPeriodic() {
 }
 
 void Robot::TestPeriodic() {
-    SmartDashboard::PutBoolean("upper limit sensor pressed", armUpperLimit.Get());
-    SmartDashboard::PutBoolean("lower limit sensor pressed", armLowerLimit.Get());
+    SmartDashboard::PutBoolean("upper limit sensor pressed", !armUpperLimit.Get());
+    SmartDashboard::PutBoolean("lower limit sensor pressed", !armLowerLimit.Get());
     lw->Run();
 }
 
