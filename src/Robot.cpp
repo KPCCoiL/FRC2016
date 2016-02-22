@@ -35,7 +35,7 @@ void Robot::AutonomousPeriodic() {
 }
 
 void Robot::TeleopInit() {
-    SmartDashboard::PutNumber("ArmOmega", 0.4);
+    SmartDashboard::PutNumber("ArmLimitedOmega", 0.4);
 }
 
 void Robot::MoveWheels() {
@@ -58,9 +58,11 @@ void Robot::MoveWheels() {
 }
 
 void Robot::MoveArm() {
-    double const ArmOmega = SmartDashboard::GetNumber("ArmOmega", 0.4);
+    double const ArmLimitedOmega = SmartDashboard::GetNumber("ArmLimitedOmega", 0.4);
     bool btnAPressed = stick.GetRawButton(ButtonA),
-         btnBPressed = stick.GetRawButton(ButtonB);
+         btnBPressed = stick.GetRawButton(ButtonB),
+         btnXPressed = stick.GetRawButton(ButtonX);
+    auto const ArmOmega = btnXPressed ? 1.0 : ArmLimitedOmega;
     if (btnAPressed ^ btnBPressed) {
         if (btnAPressed && armUpperLimit.Get()) arm.Set(ArmOmega);
         else if (btnBPressed && armLowerLimit.Get()) arm.Set(-ArmOmega);
