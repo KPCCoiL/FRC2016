@@ -9,10 +9,13 @@ Robot::Robot() :
     arm(2),
     armUpperLimit(0),
     armLowerLimit(1),
+    camera(CameraServer::GetInstance()),
     funcID(0)
 {
     leftMotor.SetInverted(true);
     SmartDashboard::init();
+    camera->SetQuality(50);
+    camera->StartAutomaticCapture("cam0");
 }
 
 void Robot::AutonomousInit() {

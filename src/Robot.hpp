@@ -18,6 +18,7 @@ class Robot: public IterativeRobot {
         LiveWindow* lw;
         CANTalon leftMotor, rightMotor, arm;
         DigitalInput armUpperLimit, armLowerLimit;
+        CameraServer* camera;
         std::chrono::time_point<std::chrono::system_clock> startTime;
         std::size_t funcID;
         std::array<std::pair<std::function<double(double)>, std::string>, 5> const funcs = {{
@@ -41,11 +42,11 @@ class Robot: public IterativeRobot {
             ButtonRightJoyStick,
         };
 
-        void AutonomousInit();
-        void AutonomousPeriodic();
-        void TeleopInit();
-        void TeleopPeriodic();
-        void TestPeriodic();
+        void AutonomousInit() override;
+        void AutonomousPeriodic() override;
+        void TeleopInit() override;
+        void TeleopPeriodic() override;
+        void TestPeriodic() override;
         void MoveWheels();
         void MoveArm();
 
