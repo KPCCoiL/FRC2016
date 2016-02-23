@@ -8,7 +8,7 @@
 #include <cmath>
 #include <string>
 
-constexpr double sig(double x) {
+inline constexpr double sig(double x) {
     return std::signbit(x) ? -1 : 1;
 }
 
@@ -17,7 +17,7 @@ class Robot: public IterativeRobot {
         Joystick stick; // only joystick
         LiveWindow* lw;
         CANTalon leftMotor, rightMotor, arm;
-        DigitalInput armUpperLimit, armLowerLimit;
+        Talon shooter;
         CameraServer* camera;
         std::chrono::time_point<std::chrono::system_clock> startTime;
         std::size_t funcID;
@@ -59,8 +59,8 @@ class Robot: public IterativeRobot {
         void Advance(double, double);
         void UpdateFunc();
         void MoveWheels();
-        void MoveArm();
-
+        template <class Controller>
+        void MoveArmLike(Controller&, StickButtons, StickButtons);
 
     public:
         Robot();
