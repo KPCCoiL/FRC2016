@@ -25,18 +25,11 @@ void Robot::AutonomousInit() {
 }
 
 void Robot::AutonomousPeriodic() {
-    /*
-       if(autoLoopCounter < 100) //Check if we've completed 100 loops (approximately 2 seconds)
-       {
-       using namespace std::literals;
-       if (startTime.time_since_epoch() < 2000ms) {
-       myRobot.Drive(-0.5, 0.0); 	// drive forwards half speed
-       autoLoopCounter++;
-       }
-       else {
-       myRobot.Drive(0.0, 0.0); 	// stop robot
-       }
-       */
+    std::chrono::milliseconds const waitDuration(
+            static_cast<long long int>(
+                SmartDashboard::GetNumber("autonomous running time (in ms)", 5000)));
+    while (startTime.time_since_epoch() < waitDuration)
+        Advance(0.5, 0.5);
 }
 
 void Robot::TeleopInit() {
