@@ -14,6 +14,7 @@ Robot::Robot() :
     funcID(0)
 {
     leftMotor.SetInverted(true);
+    arm.SetInverted(true);
     SmartDashboard::init();
     camera->SetQuality(50);
     camera->StartAutomaticCapture("cam0");
@@ -56,8 +57,8 @@ void Robot::MoveWheels() {
            rightRotate = stick.GetRawAxis(RightTrigger),
            leftSpeed = stick.GetRawAxis(LeftYAxis),
            rightSpeed = stick.GetRawAxis(RightYAxis);
-    if (leftRotate > Epsilon) Advance(leftRotate, -leftRotate);
-    else if (rightRotate > Epsilon) Advance(-rightRotate, rightRotate);
+    if (leftRotate > Epsilon) Advance(-leftRotate, leftRotate);
+    else if (rightRotate > Epsilon) Advance(rightRotate, -rightRotate);
     else Advance(leftSpeed, rightSpeed);
     UpdateFunc();
 }
