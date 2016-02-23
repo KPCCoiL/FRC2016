@@ -70,7 +70,7 @@ void Robot::MoveArmLike(Controller& motor, StickButtons forward, StickButtons ba
          unlimited = stick.GetRawButton(ButtonR);
     auto const ArmOmega = unlimited ? 1.0 : ArmLimitedOmega;
     if (goForward ^ goBackward) {
-        if (goBackward) motor.Set(ArmOmega);
+        if (goForward) motor.Set(ArmOmega);
         else if (goBackward) motor.Set(-ArmOmega);
     }
     else motor.Set(0.0);
