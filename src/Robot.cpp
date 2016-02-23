@@ -1,5 +1,7 @@
 #include "Robot.hpp"
 #include "WPILib.h"
+#include <limits>
+#include <chrono>
 
 Robot::Robot() :
     stick(0),
@@ -41,16 +43,12 @@ void Robot::TeleopInit() {
     SmartDashboard::PutNumber("ArmLimitedOmega", 0.4);
 }
 
-void Robot::MoveWheels() {
-    constexpr double LoweredPower = 0.3;
-    double leftPower = stick.GetRawButton(ButtonL) ? LoweredPower : 1.0,
-           rightPower = stick.GetRawButton(ButtonR) ? LoweredPower : 1.0,
-           leftSpeed = stick.GetRawAxis(1) * leftPower, //left joystick, y axis
-           rightSpeed = stick.GetRawAxis(5) * rightPower;    //right Joystick, y axis
+void Robot::Advance(double leftSpeed, double rightSpeed) {
     leftMotor.Set(funcs.at(funcID).first(leftSpeed));
     rightMotor.Set(funcs.at(funcID).first(rightSpeed));
+}
 
-    //check if function should be updated
+void Robot::UpdateFunc() {
     static bool yPressed = false;
     bool currentY = stick.GetRawButton(ButtonY);
     if (!yPressed && currentY) {
@@ -58,6 +56,21 @@ void Robot::MoveWheels() {
         SmartDashboard::PutString("Function", funcs.at(funcID).second);
     }
     yPressed = currentY;
+}
+
+void Robot::MoveWheels() {
+    constexpr double LoweredPower = 0.3,
+                     Epsilon = std::numeric_limits<double>::epsilon();
+    double leftRotate = stick.GetRawAxis(LeftTrigger),
+           rightRotate = stick.GetRawAxis(RightTrigger),
+           leftPower = stick.GetRawButton(ButtonL) ? LoweredPower : 1.0,
+           rightPower = stick.GetRawButton(ButtonR) ? LoweredPower : 1.0,
+           leftSpeed = stick.GetRawAxis(LeftYAxis) * leftPower,
+           rightSpeed = stick.GetRawAxis(RightYAxis) * rightPower;
+    if (leftRotate > Epsilon) Advance(leftRotate, -leftRotate);
+    else if (rightRotate > Epsilon) Advance(-rightRotate, rightRotate);
+    else Advance(leftSpeed, rightSpeed);
+    UpdateFunc();
 }
 
 void Robot::MoveArm() {

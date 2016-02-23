@@ -42,11 +42,22 @@ class Robot: public IterativeRobot {
             ButtonRightJoyStick,
         };
 
+        enum StickAxes {
+            LeftXAxis,
+            LeftYAxis,
+            LeftTrigger,
+            RightTrigger,
+            RightXAxis,
+            RightYAxis,
+        };
+
         void AutonomousInit() override;
         void AutonomousPeriodic() override;
         void TeleopInit() override;
         void TeleopPeriodic() override;
         void TestPeriodic() override;
+        void Advance(double, double);
+        void UpdateFunc();
         void MoveWheels();
         void MoveArm();
 
